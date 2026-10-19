@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>QWOVE</title>
+<link rel="icon" href="/assets/qwove_logo.png">
 <meta name="description" content="QWOVE(쿼브) 모바일 게임 스튜디오">
 <style>
   :root{--bg:#f7f5f0;--ink:#1d1b26;--muted:#6b6578;--line:#e3ddd0;--card:#fff;--accent:#8f6712}
@@ -16,13 +17,17 @@
   h2{margin:18px 0 0;font-size:15px;color:var(--muted);font-weight:600}
   a.game{display:flex;justify-content:space-between;align-items:center;padding:18px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);text-decoration:none}
   a.game span{color:var(--muted);font-size:13px}
+  .logo{background:#17151f;border-radius:20px;padding:28px;display:flex;justify-content:center}
+  .logo img{display:block;width:180px;height:auto}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
   footer{margin-top:24px;font-size:13px;color:var(--muted);line-height:1.8}
   footer a{color:var(--accent)}
 </style>
 </head>
 <body>
 <main>
-  <h1>QWOVE</h1>
+  <div class="logo"><img src="/assets/qwove_logo.png" alt="QWOVE" width="180"></div>
+  <h1 class="sr">QWOVE</h1>
   <p>QWOVE(쿼브)는 짧은 시간에 즐기는 모바일 게임을 만드는 스튜디오입니다.<br>QWOVE is a mobile game studio based in Korea.</p>
   <h2>Games</h2>
   <a class="game" href="/yacha/"><div><b>야차 키우기</b><br><span>Yaksha Hunter: Yokai Idle RPG</span></div><div>›</div></a>
