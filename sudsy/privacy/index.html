@@ -53,11 +53,21 @@
       <div class="meta">최종 수정일 2026년 10월 20일 · 패키지 <code>com.kokokopam.sudsy</code></div>
     </header>
     <div class="body">
-      <p>써디 빌리지(이하 "게임")는 이용자에게 이름, 전화번호, 주소 같은 개인정보를 직접 요구하지 않습니다. 게임에는 회원 가입이나 로그인이 없고, 게임 진행 정보는 이용자의 기기 안에만 저장됩니다.</p>
-      <section><h2>1. 게임이 저장하는 정보</h2>
-        <p>레벨, 마을과 집 수리 상태, 동전, 아이템, 하트, 구매 내역, 설정 같은 게임 진행 정보는 이용자의 기기 안에만 저장됩니다. 운영자는 이 정보를 서버로 받지 않으며 열람할 수 없습니다.</p>
+      <p>써디 빌리지(이하 "게임")는 이용자에게 이름, 전화번호, 주소 같은 개인정보를 직접 요구하지 않습니다. 게임에는 회원 가입이나 로그인이 없습니다. 게임 진행 정보는 기본적으로 기기 안에 저장되며, 진행 백업과 결제 확인에 필요한 최소한의 정보만 게임 서버와 주고받습니다.</p>
+      <section><h2>1. 기기에 저장하는 정보</h2>
+        <p>레벨, 마을과 집 수리 상태, 동전, 아이템, 하트, 구매 내역, 설정 같은 게임 진행 정보는 이용자의 기기에 저장됩니다.</p>
       </section>
-      <section><h2>2. 광고 (Google AdMob)</h2>
+      <section><h2>2. 진행 백업과 기기 옮기기</h2>
+        <p>기기를 바꾸거나 앱을 다시 설치해도 이어서 할 수 있도록, 게임은 진행 정보를 게임 서버(Supabase, 서울 리전)에 백업합니다. 이때 저장되는 정보는 아래와 같습니다.</p>
+        <ul>
+          <li>기기에서 무작위로 만든 플레이어 ID (개인을 특정하지 않으며 광고 ID와 무관)</li>
+          <li>게임 진행 정보와 앱 버전, 저장 시각</li>
+          <li>기기 옮기기 코드의 비밀 부분 (원문이 아닌 암호화된 값만 저장)</li>
+          <li>코드를 반복해서 틀리는 등의 부정 시도를 막기 위한 요청 시각과 접속 IP (30일 뒤 자동 삭제)</li>
+        </ul>
+        <p>이름, 이메일, 전화번호, 기기 고유 번호, 광고 ID는 서버로 보내지 않습니다. 전송 구간은 모두 HTTPS로 암호화됩니다.</p>
+      </section>
+      <section><h2>3. 광고 (Google AdMob)</h2>
         <p>게임은 보상형 광고만 사용합니다. 광고는 이용자가 보상을 받기 위해 직접 버튼을 눌렀을 때만 재생됩니다.</p>
         <p>AdMob은 광고 제공, 부정 사용 방지, 광고 성과 측정을 위해 광고 ID, 기기 및 앱 정보, IP 기반의 대략적인 위치, 광고 상호작용 정보를 수집·처리할 수 있습니다. 자세한 내용은 <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google 개인정보처리방침</a>을 참고해 주세요.</p>
         <ul>
@@ -66,33 +76,38 @@
           <li>Android에서는 설정 &gt; Google &gt; 광고에서 광고 ID를 재설정하거나 맞춤 광고를 끌 수 있습니다.</li>
         </ul>
       </section>
-      <section><h2>3. 인앱 결제</h2>
-        <p>유료 상품 결제는 Android에서는 Google Play 결제, iPhone·iPad에서는 Apple App Store 결제로만 처리됩니다. 결제 수단 정보는 Google 또는 Apple이 처리하며 운영자에게 전달되지 않습니다. 게임은 구매 확인을 위해 주문 번호와 상품 ID만 기기에 저장합니다.</p>
+      <section><h2>4. 인앱 결제</h2>
+        <p>유료 상품 결제는 Android에서는 Google Play 결제, iPhone·iPad에서는 Apple App Store 결제로만 처리됩니다. 결제 수단 정보는 Google 또는 Apple이 처리하며 운영자에게 전달되지 않습니다. 구매 확인과 결제 문의 대응을 위해 주문 번호, 상품 ID, 스토어 영수증을 플레이어 ID와 함께 게임 서버에 기록합니다.</p>
       </section>
-      <section><h2>4. 수집 항목 한눈에 보기</h2>
+      <section><h2>5. 수집 항목 한눈에 보기</h2>
         <div class="tw"><table>
           <tr><th>항목</th><th>처리 주체</th><th>제3자 공유</th><th>목적</th></tr>
-          <tr><td>게임 진행 정보 · 구매 내역</td><td>기기 내부</td><td>없음</td><td>게임 저장 · 구매 확인</td></tr>
+          <tr><td>게임 진행 정보</td><td>기기 · 게임 서버</td><td>없음</td><td>게임 저장 · 백업 · 기기 옮기기</td></tr>
+          <tr><td>무작위 플레이어 ID</td><td>게임 서버</td><td>없음</td><td>백업 · 기기 옮기기</td></tr>
+          <tr><td>주문 번호 · 상품 ID · 영수증</td><td>게임 서버</td><td>없음</td><td>구매 확인 · 결제 문의 대응</td></tr>
+          <tr><td>요청 시각 · 접속 IP</td><td>게임 서버</td><td>없음</td><td>부정 사용 방지 (30일 보관)</td></tr>
           <tr><td>광고 ID · 대략적 위치 · 기기 정보</td><td>Google AdMob</td><td>광고 목적</td><td>보상형 광고</td></tr>
           <tr><td>결제 수단 정보</td><td>Google Play · Apple</td><td>운영자 미전달</td><td>결제 처리</td></tr>
         </table></div>
       </section>
-      <section><h2>5. 보관 기간과 삭제</h2>
+      <section><h2>6. 보관 기간과 삭제</h2>
         <ul>
           <li>앱을 삭제하면 기기에 저장된 게임 데이터도 함께 삭제됩니다.</li>
+          <li>서버에 백업된 진행 정보는 아래 이메일로 삭제를 요청할 수 있습니다. 게임의 설정 &gt; 정보·문의에 있는 기기 옮기기 코드를 함께 보내 주시면 30일 이내에 삭제합니다.</li>
+          <li>결제 기록은 전자상거래 등에서의 소비자보호에 관한 법률에 따라 5년간 보관한 뒤 삭제합니다.</li>
           <li>광고 관련 데이터의 삭제는 Google 계정 설정에서 요청할 수 있습니다.</li>
         </ul>
       </section>
-      <section><h2>6. 국외 이전</h2>
-        <p>Google(AdMob)과 각 스토어는 대한민국 밖의 서버에서 정보를 처리할 수 있습니다. 운영자가 직접 운영하는 서버로 보내는 정보는 없습니다.</p>
+      <section><h2>7. 국외 이전</h2>
+        <p>게임 서버는 대한민국(서울)에 있습니다. 해외에서 이용하시는 경우 2장과 4장의 정보가 암호화된 연결로 대한민국에 전송되어 보관됩니다. Google(AdMob)과 각 스토어는 대한민국 밖의 서버에서 정보를 처리할 수 있습니다.</p>
       </section>
-      <section><h2>7. 아동 보호</h2>
-        <p>게임은 전체 이용가 퍼즐 게임이지만 만 13세 미만 아동을 주 대상으로 하지 않으며, 아동의 개인정보를 의도적으로 수집하지 않습니다. 보호자께서 자녀의 정보가 처리되었다고 판단하시면 아래 이메일로 알려 주세요. 확인 후 지체 없이 조치합니다.</p>
+      <section><h2>8. 아동 보호</h2>
+        <p>게임은 전체 이용가 퍼즐 게임이지만 만 13세 미만 아동을 주 대상으로 하지 않으며, 아동의 개인정보를 의도적으로 수집하지 않습니다. 보호자께서 자녀의 정보가 처리되었다고 판단하시면 아래 이메일로 알려 주세요. 확인 후 지체 없이 삭제합니다.</p>
       </section>
-      <section><h2>8. 방침의 변경</h2>
-        <p>기기 간 진행 옮기기처럼 서버를 쓰는 기능이 추가되면, 이 방침을 먼저 고친 뒤 기능을 제공합니다. 방침이 바뀌면 이 페이지의 최종 수정일을 갱신하고, 중요한 변경은 게임 안에서 안내합니다.</p>
+      <section><h2>9. 방침의 변경</h2>
+        <p>방침이 바뀌면 이 페이지의 최종 수정일을 갱신하고, 중요한 변경은 게임 안에서 안내합니다.</p>
       </section>
-      <section><h2>9. 운영자와 개인정보 보호 담당</h2>
+      <section><h2>10. 운영자와 개인정보 보호 담당</h2>
         <div class="box">
           <p>운영자: 쿼브(QWOVE)<br>개인정보 보호 담당: QWOVE 운영팀</p>
           <p>개인정보 처리에 관한 문의와 열람·정정·삭제 요청: <a href="mailto:qwove.corp@gmail.com">qwove.corp@gmail.com</a></p>
@@ -109,11 +124,21 @@
       <div class="meta">Last updated: October 20, 2026 · Package <code>com.kokokopam.sudsy</code></div>
     </header>
     <div class="body">
-      <p>Sudsy Village (the "Game") does not ask you for personal information such as your name, phone number or address. There is no sign-up or login, and your game progress is stored only on your device.</p>
-      <section><h2>1. Information stored by the Game</h2>
-        <p>Game progress such as levels, village and house repairs, coins, items, hearts, purchase records and settings is stored only on your device. We do not receive this information on any server and cannot access it.</p>
+      <p>Sudsy Village (the "Game") does not ask you for personal information such as your name, phone number or address. There is no sign-up or login. Your progress is stored on your device, and the Game exchanges only the minimum information needed with our game server to back up your progress and confirm purchases.</p>
+      <section><h2>1. Information stored on your device</h2>
+        <p>Game progress such as levels, village and house repairs, coins, items, hearts, purchase records and settings is stored on your device.</p>
       </section>
-      <section><h2>2. Advertising (Google AdMob)</h2>
+      <section><h2>2. Progress backup and moving to another device</h2>
+        <p>So that you can continue after changing devices or reinstalling, the Game backs up your progress to our game server (Supabase, Seoul region). The following is stored:</p>
+        <ul>
+          <li>A random player ID generated on your device. It does not identify you personally and is unrelated to your advertising ID</li>
+          <li>Your game progress, the app version and the time it was saved</li>
+          <li>The secret part of your transfer code, stored only in encrypted (hashed) form</li>
+          <li>Request times and IP addresses, used to block abuse such as repeatedly guessing codes, deleted automatically after 30 days</li>
+        </ul>
+        <p>We never send your name, email, phone number, device identifiers or advertising ID to our server. All transmission is encrypted with HTTPS.</p>
+      </section>
+      <section><h2>3. Advertising (Google AdMob)</h2>
         <p>The Game uses rewarded ads only. Ads play only when you tap a button to receive a reward.</p>
         <p>AdMob may collect and process your advertising ID, device and app information, approximate location based on IP address, and ad interaction data in order to serve ads, prevent fraud and measure ad performance. See the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a>.</p>
         <ul>
@@ -122,33 +147,38 @@
           <li>On Android you can reset your advertising ID or opt out of personalized ads in Settings &gt; Google &gt; Ads.</li>
         </ul>
       </section>
-      <section><h2>3. In-app purchases</h2>
-        <p>Paid items are processed only through Google Play Billing on Android and the Apple App Store on iPhone and iPad. Google or Apple handles your payment details; they are never passed to us. The Game stores only the order number and product ID on your device to confirm purchases.</p>
+      <section><h2>4. In-app purchases</h2>
+        <p>Paid items are processed only through Google Play Billing on Android and the Apple App Store on iPhone and iPad. Google or Apple handles your payment details; they are never passed to us. To confirm purchases and help with payment inquiries, we record the order number, product ID and store receipt together with your player ID on our game server.</p>
       </section>
-      <section><h2>4. Summary</h2>
+      <section><h2>5. Summary</h2>
         <div class="tw"><table>
           <tr><th>Information</th><th>Processed by</th><th>Shared with third parties</th><th>Purpose</th></tr>
-          <tr><td>Game progress · purchase records</td><td>Your device</td><td>No</td><td>Saving the game · confirming purchases</td></tr>
+          <tr><td>Game progress</td><td>Your device · game server</td><td>No</td><td>Saving · backup · moving devices</td></tr>
+          <tr><td>Random player ID</td><td>Game server</td><td>No</td><td>Backup · moving devices</td></tr>
+          <tr><td>Order number · product ID · receipt</td><td>Game server</td><td>No</td><td>Confirming purchases · payment support</td></tr>
+          <tr><td>Request time · IP address</td><td>Game server</td><td>No</td><td>Abuse prevention (kept 30 days)</td></tr>
           <tr><td>Advertising ID · approximate location · device info</td><td>Google AdMob</td><td>For advertising</td><td>Rewarded ads</td></tr>
           <tr><td>Payment details</td><td>Google Play · Apple</td><td>Not passed to us</td><td>Payment processing</td></tr>
         </table></div>
       </section>
-      <section><h2>5. Retention and deletion</h2>
+      <section><h2>6. Retention and deletion</h2>
         <ul>
           <li>Uninstalling the app deletes the game data stored on your device.</li>
+          <li>To delete your backup on our server, email us with the transfer code shown in Settings &gt; Info in the Game. We delete it within 30 days.</li>
+          <li>Purchase records are kept for 5 years as required by Korean consumer protection law, then deleted.</li>
           <li>You can request deletion of advertising data in your Google account settings.</li>
         </ul>
       </section>
-      <section><h2>6. International transfer</h2>
-        <p>Google (AdMob) and the app stores may process data on servers outside your country. We do not send any information to servers of our own.</p>
+      <section><h2>7. International transfer</h2>
+        <p>Our game server is located in Seoul, Republic of Korea. If you play from outside Korea, the information in Sections 2 and 4 is transferred to and stored in Korea over an encrypted connection. Google (AdMob) and the app stores may process data on servers outside your country.</p>
       </section>
-      <section><h2>7. Children</h2>
-        <p>The Game is rated for everyone but is not directed primarily at children under 13, and we do not knowingly collect personal information from children. If you believe your child's information has been processed, please contact us and we will act on it promptly.</p>
+      <section><h2>8. Children</h2>
+        <p>The Game is rated for everyone but is not directed primarily at children under 13, and we do not knowingly collect personal information from children. If you believe your child's information has been processed, please contact us and we will delete it promptly.</p>
       </section>
-      <section><h2>8. Changes to this policy</h2>
-        <p>If we add a feature that uses a server, such as moving your progress to another device, we will update this policy before the feature becomes available. When the policy changes, we will update the "Last updated" date on this page and announce important changes in the Game.</p>
+      <section><h2>9. Changes to this policy</h2>
+        <p>If this policy changes, we will update the "Last updated" date on this page and announce important changes in the Game.</p>
       </section>
-      <section><h2>9. Operator and privacy contact</h2>
+      <section><h2>10. Operator and privacy contact</h2>
         <div class="box">
           <p>Operator: QWOVE (쿼브), Republic of Korea<br>Privacy contact: QWOVE Operations Team</p>
           <p>Privacy inquiries and requests to access, correct or delete: <a href="mailto:qwove.corp@gmail.com">qwove.corp@gmail.com</a></p>
@@ -165,11 +195,21 @@
       <div class="meta">最終更新日 2026年10月20日 · パッケージ <code>com.kokokopam.sudsy</code></div>
     </header>
     <div class="body">
-      <p>ぽかぽか洗濯村（英語名 Sudsy Village、以下「本ゲーム」）は、氏名、電話番号、住所などの個人情報をお客様に求めることはありません。会員登録やログインはなく、ゲームの進行データはお客様の端末にのみ保存されます。</p>
-      <section><h2>1. 本ゲームが保存する情報</h2>
-        <p>レベル、村や家の修理状況、コイン、アイテム、ハート、購入履歴、設定などの進行データは、お客様の端末にのみ保存されます。運営者がこれらの情報をサーバーで受け取ることはなく、閲覧することもできません。</p>
+      <p>ぽかぽか洗濯村（英語名 Sudsy Village、以下「本ゲーム」）は、氏名、電話番号、住所などの個人情報をお客様に求めることはありません。会員登録やログインはありません。ゲームの進行データは基本的にお客様の端末に保存され、進行データのバックアップと購入の確認に必要な最小限の情報だけをゲームサーバーとやり取りします。</p>
+      <section><h2>1. 端末に保存する情報</h2>
+        <p>レベル、村や家の修理状況、コイン、アイテム、ハート、購入履歴、設定などの進行データは、お客様の端末に保存されます。</p>
       </section>
-      <section><h2>2. 広告（Google AdMob）</h2>
+      <section><h2>2. 進行データのバックアップと引き継ぎ</h2>
+        <p>機種変更や再インストールのあとも続きから遊べるよう、本ゲームは進行データをゲームサーバー（Supabase、ソウルリージョン）にバックアップします。保存される情報は次のとおりです。</p>
+        <ul>
+          <li>端末でランダムに作成したプレイヤー ID（個人を特定するものではなく、広告 ID とも無関係です）</li>
+          <li>ゲームの進行データ、アプリのバージョン、保存した時刻</li>
+          <li>引き継ぎコードの秘密の部分（元の値ではなく、暗号化した値のみを保存）</li>
+          <li>コードを何度も間違えるなどの不正を防ぐための、リクエストの時刻と IP アドレス（30日後に自動で削除）</li>
+        </ul>
+        <p>氏名、メールアドレス、電話番号、端末固有の番号、広告 ID はサーバーに送信しません。通信はすべて HTTPS で暗号化されます。</p>
+      </section>
+      <section><h2>3. 広告（Google AdMob）</h2>
         <p>本ゲームではリワード広告のみを使用しています。広告は、お客様が報酬を受け取るためにボタンを押したときにだけ再生されます。</p>
         <p>AdMob は、広告の配信、不正利用の防止、広告効果の測定のために、広告 ID、端末とアプリの情報、IP アドレスにもとづくおおよその位置情報、広告とのやり取りに関する情報を収集・処理することがあります。詳しくは <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google プライバシー ポリシー</a>をご覧ください。</p>
         <ul>
@@ -178,33 +218,38 @@
           <li>Android では、設定 &gt; Google &gt; 広告 から広告 ID のリセットやパーソナライズ広告の無効化ができます。</li>
         </ul>
       </section>
-      <section><h2>3. アプリ内課金</h2>
-        <p>有料アイテムのお支払いは、Android では Google Play、iPhone・iPad では Apple App Store の決済のみで処理されます。お支払い方法の情報は Google または Apple が取り扱い、運営者に渡ることはありません。本ゲームは購入の確認のため、注文番号と商品 ID のみを端末に保存します。</p>
+      <section><h2>4. アプリ内課金</h2>
+        <p>有料アイテムのお支払いは、Android では Google Play、iPhone・iPad では Apple App Store の決済のみで処理されます。お支払い方法の情報は Google または Apple が取り扱い、運営者に渡ることはありません。購入の確認とお支払いに関するお問い合わせへの対応のため、注文番号、商品 ID、ストアのレシートをプレイヤー ID とともにゲームサーバーに記録します。</p>
       </section>
-      <section><h2>4. 取り扱う情報の一覧</h2>
+      <section><h2>5. 取り扱う情報の一覧</h2>
         <div class="tw"><table>
           <tr><th>情報</th><th>取り扱う者</th><th>第三者への提供</th><th>目的</th></tr>
-          <tr><td>進行データ · 購入履歴</td><td>お客様の端末</td><td>なし</td><td>ゲームの保存 · 購入の確認</td></tr>
+          <tr><td>進行データ</td><td>お客様の端末 · ゲームサーバー</td><td>なし</td><td>保存 · バックアップ · 引き継ぎ</td></tr>
+          <tr><td>ランダムなプレイヤー ID</td><td>ゲームサーバー</td><td>なし</td><td>バックアップ · 引き継ぎ</td></tr>
+          <tr><td>注文番号 · 商品 ID · レシート</td><td>ゲームサーバー</td><td>なし</td><td>購入の確認 · お問い合わせ対応</td></tr>
+          <tr><td>リクエスト時刻 · IP アドレス</td><td>ゲームサーバー</td><td>なし</td><td>不正利用の防止（30日間保存）</td></tr>
           <tr><td>広告 ID · おおよその位置 · 端末情報</td><td>Google AdMob</td><td>広告目的</td><td>リワード広告</td></tr>
           <tr><td>お支払い方法の情報</td><td>Google Play · Apple</td><td>運営者には渡りません</td><td>決済処理</td></tr>
         </table></div>
       </section>
-      <section><h2>5. 保存期間と削除</h2>
+      <section><h2>6. 保存期間と削除</h2>
         <ul>
           <li>アプリを削除すると、端末に保存されたゲームデータも削除されます。</li>
+          <li>サーバーにバックアップされた進行データは、下記のメールアドレスから削除をご依頼いただけます。ゲームの 設定 &gt; 情報・お問い合わせ にある引き継ぎコードを添えていただければ、30日以内に削除します。</li>
+          <li>購入記録は、韓国の電子商取引に関する消費者保護法にもとづき5年間保存したあと削除します。</li>
           <li>広告に関するデータの削除は、Google アカウントの設定からリクエストできます。</li>
         </ul>
       </section>
-      <section><h2>6. 国外への移転</h2>
-        <p>Google（AdMob）および各ストアは、お住まいの国の外にあるサーバーで情報を処理することがあります。運営者が自ら運営するサーバーへ送る情報はありません。</p>
+      <section><h2>7. 国外への移転</h2>
+        <p>ゲームサーバーは大韓民国（ソウル）にあります。韓国国外からご利用の場合、2章と4章の情報は暗号化された通信で韓国に送信・保存されます。Google（AdMob）および各ストアは、お住まいの国の外にあるサーバーで情報を処理することがあります。</p>
       </section>
-      <section><h2>7. お子様について</h2>
-        <p>本ゲームは全年齢向けのパズルゲームですが、13歳未満のお子様を主な対象とはしておらず、お子様の個人情報を意図して収集することはありません。お子様の情報が処理されたと思われる場合は、下記のメールアドレスまでご連絡ください。確認のうえ速やかに対応いたします。</p>
+      <section><h2>8. お子様について</h2>
+        <p>本ゲームは全年齢向けのパズルゲームですが、13歳未満のお子様を主な対象とはしておらず、お子様の個人情報を意図して収集することはありません。お子様の情報が処理されたと思われる場合は、下記のメールアドレスまでご連絡ください。確認のうえ速やかに削除いたします。</p>
       </section>
-      <section><h2>8. 本ポリシーの変更</h2>
-        <p>端末間で進行データを引き継ぐ機能など、サーバーを使う機能を追加する場合は、先に本ポリシーを改定してから提供します。改定した際はこのページの最終更新日を更新し、重要な変更はゲーム内でお知らせします。</p>
+      <section><h2>9. 本ポリシーの変更</h2>
+        <p>改定した際はこのページの最終更新日を更新し、重要な変更はゲーム内でお知らせします。</p>
       </section>
-      <section><h2>9. 運営者とお問い合わせ先</h2>
+      <section><h2>10. 運営者とお問い合わせ先</h2>
         <div class="box">
           <p>運営者：QWOVE（쿼브）、大韓民国<br>個人情報の窓口：QWOVE 運営チーム</p>
           <p>個人情報に関するお問い合わせ、開示・訂正・削除のご依頼：<a href="mailto:qwove.corp@gmail.com">qwove.corp@gmail.com</a></p>
@@ -221,11 +266,21 @@
       <div class="meta">最後更新日期：2026年10月20日 · 套件名稱 <code>com.kokokopam.sudsy</code></div>
     </header>
     <div class="body">
-      <p>暖暖洗衣村（英文名稱 Sudsy Village，以下簡稱「本遊戲」）不會要求您提供姓名、電話號碼或地址等個人資料。本遊戲沒有註冊或登入功能，遊戲進度只會儲存在您的裝置上。</p>
-      <section><h2>1. 本遊戲儲存的資料</h2>
-        <p>關卡、村莊與房屋的修繕狀態、金幣、道具、愛心、購買紀錄及設定等遊戲進度，只會儲存在您的裝置上。營運者不會透過伺服器接收這些資料，也無法查看。</p>
+      <p>暖暖洗衣村（英文名稱 Sudsy Village，以下簡稱「本遊戲」）不會要求您提供姓名、電話號碼或地址等個人資料。本遊戲沒有註冊或登入功能。遊戲進度基本上儲存在您的裝置上，只有備份進度與確認購買所需的最少資料會與遊戲伺服器往來。</p>
+      <section><h2>1. 儲存在裝置上的資料</h2>
+        <p>關卡、村莊與房屋的修繕狀態、金幣、道具、愛心、購買紀錄及設定等遊戲進度，會儲存在您的裝置上。</p>
       </section>
-      <section><h2>2. 廣告（Google AdMob）</h2>
+      <section><h2>2. 進度備份與轉移裝置</h2>
+        <p>為了讓您在更換裝置或重新安裝後也能繼續遊玩，本遊戲會將進度備份到遊戲伺服器（Supabase，首爾區域）。儲存的資料如下：</p>
+        <ul>
+          <li>在裝置上隨機產生的玩家 ID（無法識別您的身分，也與廣告 ID 無關）</li>
+          <li>遊戲進度、應用程式版本與儲存時間</li>
+          <li>轉移代碼的密碼部分（只儲存加密後的值，不儲存原文）</li>
+          <li>為防止反覆猜錯代碼等不當行為而記錄的請求時間與 IP 位址（30 天後自動刪除）</li>
+        </ul>
+        <p>我們不會將您的姓名、電子郵件、電話號碼、裝置識別碼或廣告 ID 傳送到伺服器。所有傳輸皆以 HTTPS 加密。</p>
+      </section>
+      <section><h2>3. 廣告（Google AdMob）</h2>
         <p>本遊戲只使用獎勵廣告。只有在您為了領取獎勵而主動按下按鈕時，才會播放廣告。</p>
         <p>為了提供廣告、防止不當使用及衡量廣告成效，AdMob 可能會收集並處理您的廣告 ID、裝置與應用程式資訊、依 IP 位址推估的大略位置，以及您與廣告互動的資訊。詳情請參閱 <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google 隱私權政策</a>。</p>
         <ul>
@@ -234,33 +289,38 @@
           <li>在 Android 上，您可以前往「設定 &gt; Google &gt; 廣告」重設廣告 ID，或關閉個人化廣告。</li>
         </ul>
       </section>
-      <section><h2>3. 應用程式內購買</h2>
-        <p>付費商品在 Android 上只透過 Google Play 付款處理，在 iPhone 和 iPad 上只透過 Apple App Store 付款處理。付款方式資料由 Google 或 Apple 處理，不會提供給營運者。本遊戲只在裝置上儲存訂單編號與商品 ID，用來確認購買。</p>
+      <section><h2>4. 應用程式內購買</h2>
+        <p>付費商品在 Android 上只透過 Google Play 付款處理，在 iPhone 和 iPad 上只透過 Apple App Store 付款處理。付款方式資料由 Google 或 Apple 處理，不會提供給營運者。為了確認購買並處理付款相關問題，我們會將訂單編號、商品 ID 與商店收據連同玩家 ID 記錄在遊戲伺服器上。</p>
       </section>
-      <section><h2>4. 資料處理一覽</h2>
+      <section><h2>5. 資料處理一覽</h2>
         <div class="tw"><table>
           <tr><th>資料</th><th>處理者</th><th>是否提供第三方</th><th>目的</th></tr>
-          <tr><td>遊戲進度 · 購買紀錄</td><td>您的裝置</td><td>否</td><td>儲存遊戲 · 確認購買</td></tr>
+          <tr><td>遊戲進度</td><td>您的裝置 · 遊戲伺服器</td><td>否</td><td>儲存 · 備份 · 轉移裝置</td></tr>
+          <tr><td>隨機玩家 ID</td><td>遊戲伺服器</td><td>否</td><td>備份 · 轉移裝置</td></tr>
+          <tr><td>訂單編號 · 商品 ID · 收據</td><td>遊戲伺服器</td><td>否</td><td>確認購買 · 付款客服</td></tr>
+          <tr><td>請求時間 · IP 位址</td><td>遊戲伺服器</td><td>否</td><td>防止不當使用（保存 30 天）</td></tr>
           <tr><td>廣告 ID · 大略位置 · 裝置資訊</td><td>Google AdMob</td><td>用於廣告</td><td>獎勵廣告</td></tr>
           <tr><td>付款方式資料</td><td>Google Play · Apple</td><td>不提供給營運者</td><td>付款處理</td></tr>
         </table></div>
       </section>
-      <section><h2>5. 保存期間與刪除</h2>
+      <section><h2>6. 保存期間與刪除</h2>
         <ul>
           <li>刪除應用程式後，儲存在裝置上的遊戲資料也會一併刪除。</li>
+          <li>伺服器上的進度備份可透過下方電子郵件申請刪除。請一併提供遊戲「設定 &gt; 資訊・聯絡我們」中的轉移代碼，我們會在 30 天內刪除。</li>
+          <li>購買紀錄依韓國電子商務消費者保護相關法律保存 5 年後刪除。</li>
           <li>廣告相關資料可在您的 Google 帳戶設定中申請刪除。</li>
         </ul>
       </section>
-      <section><h2>6. 跨境傳輸</h2>
-        <p>Google（AdMob）及各應用程式商店可能會在您所在國家以外的伺服器處理資料。營運者不會將任何資料傳送到自行營運的伺服器。</p>
+      <section><h2>7. 跨境傳輸</h2>
+        <p>遊戲伺服器位於大韓民國（首爾）。若您在韓國以外地區遊玩，第 2 章與第 4 章的資料會透過加密連線傳送至韓國並保存。Google（AdMob）及各應用程式商店可能會在您所在國家以外的伺服器處理資料。</p>
       </section>
-      <section><h2>7. 兒童保護</h2>
-        <p>本遊戲為普遍級益智遊戲，但並非以未滿 13 歲的兒童為主要對象，也不會刻意收集兒童的個人資料。若您認為孩子的資料已被處理，請透過下方電子郵件與我們聯絡，我們確認後會立即處理。</p>
+      <section><h2>8. 兒童保護</h2>
+        <p>本遊戲為普遍級益智遊戲，但並非以未滿 13 歲的兒童為主要對象，也不會刻意收集兒童的個人資料。若您認為孩子的資料已被處理，請透過下方電子郵件與我們聯絡，我們確認後會立即刪除。</p>
       </section>
-      <section><h2>8. 本政策的變更</h2>
-        <p>若日後新增需要使用伺服器的功能（例如在不同裝置間轉移遊戲進度），我們會先修改本政策，再提供該功能。政策變更時，我們會更新本頁的最後更新日期，重要變更也會在遊戲中公告。</p>
+      <section><h2>9. 本政策的變更</h2>
+        <p>政策變更時，我們會更新本頁的最後更新日期，重要變更也會在遊戲中公告。</p>
       </section>
-      <section><h2>9. 營運者與聯絡方式</h2>
+      <section><h2>10. 營運者與聯絡方式</h2>
         <div class="box">
           <p>營運者：QWOVE（쿼브），大韓民國<br>個人資料聯絡窗口：QWOVE 營運團隊</p>
           <p>個人資料相關諮詢，以及查詢、更正、刪除的申請：<a href="mailto:qwove.corp@gmail.com">qwove.corp@gmail.com</a></p>
