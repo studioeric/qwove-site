@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>야차 운영</title>
+<meta name="robots" content="noindex,nofollow">
+<style>
+  :root{--bg:#0E0A0E;--card:#1A1218;--line:#3A2A22;--gold:#E8C67A;--text:#F3EADB;--dim:#A89A88;--ok:#7FD39A;--bad:#ff7b7b}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 -apple-system,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;padding:16px}
+  main{max-width:1100px;margin:0 auto}
+  h1{color:var(--gold);font-size:22px;margin:0 0 12px}
+  h2{color:var(--gold);font-size:16px;margin:18px 0 8px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin:0 0 12px;overflow-x:auto}
+  input,select,textarea{font:inherit;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:#0B080B;color:var(--text)}
+  button{font:inherit;font-weight:600;padding:8px 12px;border:0;border-radius:8px;background:#9e1f27;color:#fff;cursor:pointer;margin:2px}
+  button.sub{background:#2c2228}
+  table{border-collapse:collapse;width:100%;font-size:13px}
+  th,td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;white-space:nowrap}
+  th{color:var(--dim);font-weight:600}
+  .tabs button{background:#2c2228}.tabs button.on{background:var(--gold);color:#1a0e08}
+  .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .dim{color:var(--dim)}.ok{color:var(--ok)}.bad{color:var(--bad)}
+  #msg{min-height:20px;margin:6px 0}
+  .hide{display:none}
+</style>
+</head>
+<body>
+<main>
+  <h1>야차 키우기 운영</h1>
+  <div id="msg" class="dim"></div>
+
+  <section id="login" class="card hide">
+    <p>운영자 메일로 로그인 링크를 보냅니다. 등록된 운영자 메일만 사용할 수 있습니다.</p>
+    <div class="row"><input id="email" type="email" placeholder="운영자 메일" size="30"><button id="sendLink">로그인 링크 받기</button></div>
+  </section>
+
+  <section id="app" class="hide">
+    <div class="row tabs" id="tabs">
+      <button data-t="inbox" class="on">확인할 일</button><button data-t="player">플레이어</button>
+      <button data-t="metrics">지표</button><button data-t="chat">채팅 신고</button><button data-t="config">원격 설정</button>
+      <button class="sub" id="logout">로그아웃</button>
+    </div>
+
+    <div id="t-inbox" class="card"></div>
+
+    <div id="t-player" class="hide">
+      <div class="card row"><input id="q" placeholder="플레이어 ID 앞 4자 이상, 닉네임, 거래 번호" size="40"><button id="find">찾기</button></div>
+      <div id="found" class="card hide"></div>
+      <div id="detail" class="hide">
+        <div class="card" id="pinfo"></div>
+        <div class="card">
+          <h2>우편 보내기</h2>
+          <div class="row">
+            <input id="g-title" placeholder="제목" size="24"><input id="g-gem" type="number" placeholder="보석" style="width:90px">
+            <input id="g-soul" type="number" placeholder="혼백" style="width:80px"><input id="g-scroll" type="number" placeholder="부적" style="width:80px">
+            <input id="g-stone" type="number" placeholder="강화석" style="width:80px"><input id="g-keys" type="number" placeholder="열쇠" style="width:70px">
+          </div>
+          <div class="row" style="margin-top:6px"><textarea id="g-body" rows="2" cols="60" placeholder="본문"></textarea></div>
+          <div class="row" style="margin-top:6px"><input id="g-items" size="60" placeholder="아이템(선택) 예: costume:12,spirit:5:1,equip:0:7:1,pass:premium"></div>
+          <div class="row" style="margin-top:6px"><input id="g-reason" size="50" placeholder="이유(필수, 기록에 남음)"><button id="g-send">보내기</button></div>
+        </div>
+        <div class="card">
+          <h2>랭킹·VIP</h2>
+          <div class="row"><input id="a-reason" size="50" placeholder="이유(필수)"></div>
+          <div class="row" style="margin-top:6px">
+            <button id="a-unhide">숨김 해제 + 정상 확인</button><button class="sub" id="a-hide">랭킹에서 숨김</button>
+            <select id="a-vip"><option value="0">VIP 수동 해제</option><option value="1">VIP 1</option><option value="2">VIP 2</option><option value="3">VIP 3</option></select>
+            <input id="a-note" size="30" placeholder="운영 메모"><button class="sub" id="a-setvip">VIP·메모 저장</button>
+          </div>
+        </div>
+        <div class="card" id="porders"></div>
+        <div class="card" id="pgifts"></div>
+      </div>
+    </div>
+
+    <div id="t-metrics" class="card hide"></div>
+    <div id="t-chat" class="card hide"></div>
+    <div id="t-config" class="card hide"></div>
+  </section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+const sb = supabase.createClient('https://letgxptaskqiyqagazfz.supabase.co', 'sb_publishable_uLXboZjY-ERjPjhcLwJIsQ_rvtxy6rA');
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const kst = (t) => t ? new Date(t).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul', hour12: false }) : '';
+const won = (n) => '₩' + Number(n || 0).toLocaleString('ko-KR');
+let cur = null;
+
+function say(t, cls) { $('msg').className = cls || 'dim'; $('msg').textContent = t; }
+function table(rows, cols) {
+  if (!rows || !rows.length) return '<p class="dim">없음</p>';
+  return '<table><tr>' + cols.map((c) => '<th>' + esc(c[1]) + '</th>').join('') + '</tr>' +
+    rows.map((r) => '<tr>' + cols.map((c) => '<td>' + (c[2] ? c[2](r[c[0]], r) : esc(r[c[0]])) + '</td>').join('') + '</tr>').join('') + '</table>';
+}
+async function rpc(fn, args) {
+  const { data, error } = await sb.rpc(fn, args || {});
+  if (error) { say(fn + ' 오류: ' + error.message, 'bad'); throw error; }
+  return data;
+}
+
+async function boot() {
+  const { data } = await sb.auth.getSession();
+  if (!data.session) { $('login').classList.remove('hide'); $('app').classList.add('hide'); return; }
+  const ok = await rpc('yacha_is_admin').catch(() => false);
+  if (!ok) { say('운영자로 등록되지 않은 메일입니다: ' + data.session.user.email, 'bad'); $('login').classList.remove('hide'); return; }
+  $('login').classList.add('hide'); $('app').classList.remove('hide');
+  say('로그인: ' + data.session.user.email, 'ok');
+  showTab('inbox');
+}
+
+$('sendLink').onclick = async () => {
+  const email = $('email').value.trim(); if (!email) return;
+  const { error } = await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: location.origin + location.pathname, shouldCreateUser: true } });
+  say(error ? '실패: ' + error.message : '메일함에서 로그인 링크를 눌러 주세요.', error ? 'bad' : 'ok');
+};
+$('logout').onclick = async () => { await sb.auth.signOut(); location.reload(); };
+
+document.querySelectorAll('#tabs button[data-t]').forEach((b) => b.onclick = () => showTab(b.dataset.t));
+function showTab(t) {
+  document.querySelectorAll('#tabs button[data-t]').forEach((b) => b.classList.toggle('on', b.dataset.t === t));
+  ['inbox', 'player', 'metrics', 'chat', 'config'].forEach((x) => $('t-' + x).classList.toggle('hide', x !== t));
+  ({ inbox: loadInbox, player: () => {}, metrics: loadMetrics, chat: loadChat, config: loadConfig })[t]();
+}
+
+const KIND = { review: '결제자 검토', refund: '환불·스토어 불일치', delete: '계정 삭제 요청', speed: '진행 속도 검토' };
+async function loadInbox() {
+  const rows = await rpc('admin_inbox');
+  $('t-inbox').innerHTML = '<h2>확인할 일 ' + rows.length + '건</h2>' + table(rows, [
+    ['kind', '종류', (v) => esc(KIND[v] || v)], ['name', '닉네임'], ['player_id', '플레이어', (v) => '<a href="#" data-p="' + esc(v) + '">' + esc((v || '').slice(0, 8)) + '</a>'],
+    ['info', '내용'], ['at', '시각', kst]]);
+  $('t-inbox').querySelectorAll('a[data-p]').forEach((a) => a.onclick = (e) => { e.preventDefault(); showTab('player'); $('q').value = a.dataset.p; find(); });
+}
+
+$('find').onclick = find; $('q').onkeydown = (e) => { if (e.key === 'Enter') find(); };
+async function find() {
+  const rows = await rpc('admin_find_player', { p_q: $('q').value.trim() });
+  $('found').classList.remove('hide'); $('detail').classList.add('hide');
+  $('found').innerHTML = table(rows, [
+    ['name', '닉네임'], ['id', 'ID', (v) => '<a href="#" data-id="' + esc(v) + '">' + esc(v.slice(0, 4).toUpperCase() + '-' + v.slice(4, 8).toUpperCase()) + '</a>'],
+    ['region', '지역'], ['tower', '탑'], ['spend_krw', '결제', won], ['vip', 'VIP'], ['hidden', '숨김', (v, r) => v ? '<span class="bad">' + esc(r.hidden_reason) + '</span>' : ''],
+    ['updated_at', '최근', kst]]);
+  $('found').querySelectorAll('a[data-id]').forEach((a) => a.onclick = (e) => { e.preventDefault(); open(rows.find((r) => r.id === a.dataset.id)); });
+  if (rows.length === 1) open(rows[0]);
+}
+async function open(p) {
+  cur = p; $('detail').classList.remove('hide');
+  $('pinfo').innerHTML = '<h2>' + esc(p.name) + ' <span class="dim">' + esc(p.id) + '</span></h2>' +
+    '<div>지역 ' + p.region + '-' + p.stage + ' · 탑 ' + p.tower + ' · 전투력 ' + Number(p.power).toExponential(2) + ' · 보석 ' + Number(p.gem || 0).toLocaleString() + '</div>' +
+    '<div>결제 ' + won(p.spend_krw) + ' (' + p.orders + '건) · VIP ' + p.vip + (p.vip_manual ? ' (수동)' : '') + ' · 첫 접속 ' + kst(p.first_seen) + '</div>' +
+    '<div>랭킹: ' + (p.hidden ? '<span class="bad">숨김(' + esc(p.hidden_reason) + ')</span>' : '<span class="ok">표시</span>') + (p.hidden_ok ? ' · 정상 확인됨' : '') +
+    (p.review_reason ? ' · 검토: ' + esc(p.review_reason) : '') + '</div>' + (p.admin_note ? '<div class="dim">메모: ' + esc(p.admin_note) + '</div>' : '');
+  $('a-note').value = p.admin_note || ''; $('a-vip').value = String(p.vip_manual || 0);
+  const ords = await rpc('admin_player_orders', { p_id: p.id });
+  $('porders').innerHTML = '<h2>결제 ' + ords.length + '건</h2>' + table(ords, [['created_at', '시각', kst], ['store', '스토어'], ['product_id', '상품'], ['krw', '원', won],
+    ['verified', '스토어 확인', (v, r) => r.verified_at ? (v ? '<span class="ok">확인</span>' : '<span class="bad">아님</span>') : '<span class="dim">대기</span>'],
+    ['verify_note', '메모'], ['transaction_id', '거래', (v) => esc(String(v).slice(0, 26))], ['app_version', '앱']]);
+  const gifts = await rpc('admin_player_gifts', { p_id: p.id });
+  $('pgifts').innerHTML = '<h2>개인 우편 ' + gifts.length + '건</h2>' + table(gifts, [['created_at', '시각', kst], ['title', '제목'], ['gem', '보석'], ['items', '아이템'], ['mail_id', '번호']]);
+}
+
+$('g-send').onclick = async () => {
+  if (!cur) return;
+  const items = $('g-items').value.replace(/\s/g, '');
+  if (items && !/^((equip:[0-2]:\d{1,4}:\d{1,3}|spirit:\d{1,4}:\d{1,3}|costume:\d{1,3}|pass:premium)(,|$))+$/.test(items)) return say('아이템 형식이 올바르지 않습니다.', 'bad');
+  const args = { p_player: cur.id, p_title: $('g-title').value, p_body: $('g-body').value, p_gem: +$('g-gem').value || 0, p_soul: +$('g-soul').value || 0,
+    p_scroll: +$('g-scroll').value || 0, p_stone: +$('g-stone').value || 0, p_keys: +$('g-keys').value || 0, p_items: items, p_reason: $('g-reason').value, p_confirm: false };
+  let r = await rpc('admin_send_gift', args);
+  if (r === 'need_confirm') {
+    if (!confirm(cur.name + ' 님께 보석 ' + args.p_gem.toLocaleString() + (items ? ' + 아이템 ' + items : '') + ' 를 보냅니다. 맞습니까?')) return;
+    r = await rpc('admin_send_gift', { ...args, p_confirm: true });
+  }
+  say(r.startsWith('ok') ? '우편을 보냈습니다 (' + r.slice(3) + ')' : '보내지 못함: ' + r, r.startsWith('ok') ? 'ok' : 'bad');
+  if (r.startsWith('ok')) open(cur);
+};
+async function setHidden(hidden, okFlag) {
+  if (!cur) return;
+  const r = await rpc('admin_set_hidden', { p_player: cur.id, p_hidden: hidden, p_ok: okFlag, p_reason: $('a-reason').value });
+  say(r === 'ok' ? '바꿨습니다.' : '실패: ' + r, r === 'ok' ? 'ok' : 'bad'); if (r === 'ok') find();
+}
+$('a-unhide').onclick = () => setHidden(false, true);
+$('a-hide').onclick = () => { if (confirm('랭킹에서 숨깁니다. 맞습니까?')) setHidden(true, false); };
+$('a-setvip').onclick = async () => {
+  if (!cur) return;
+  const r = await rpc('admin_set_vip', { p_player: cur.id, p_tier: +$('a-vip').value, p_note: $('a-note').value, p_reason: $('a-reason').value || 'VIP·메모' });
+  say(r === 'ok' ? '저장했습니다.' : '실패: ' + r, r === 'ok' ? 'ok' : 'bad'); if (r === 'ok') find();
+};
+
+async function loadMetrics() {
+  const rows = await rpc('admin_daily_metrics', { p_days: 30 });
+  const pct = (v) => v == null ? '<span class="dim">-</span>' : v + '%';
+  $('t-metrics').innerHTML = '<h2>일일 지표 (한국 시간)</h2>' + table(rows, [['day', '날짜'], ['new_players', '신규'], ['dau', 'DAU'], ['d1', 'D1', pct], ['d7', 'D7', pct],
+    ['payers', '결제자'], ['orders', '결제'], ['revenue_krw', '매출(정가)', won], ['arpdau', 'ARPDAU', (v) => v == null ? '-' : won(v)], ['refunds', '환불'], ['refund_krw', '환불액', won]]) +
+    '<p class="dim">매출은 상품 정가 기준(스토어 수수료·세금 전). 실제 정산은 스토어 보고서 기준.</p>';
+}
+
+async function loadChat() {
+  const rows = await rpc('admin_chat_reports');
+  $('t-chat').innerHTML = '<h2>신고된 채팅 ' + rows.length + '건</h2>' + '<div class="row"><input id="c-reason" size="40" placeholder="이유(필수)"></div>' +
+    table(rows, [['at', '시각', kst], ['channel', '채널'], ['name', '닉네임'], ['body', '내용'], ['reports', '신고'], ['hidden', '가림', (v) => v ? '가림' : ''],
+      ['message_id', '조치', (v) => '<button data-m="' + v + '" data-a="hide">가리기</button><button class="sub" data-m="' + v + '" data-a="mute">가리기+24시간 음소거</button><button class="sub" data-m="' + v + '" data-a="keep">문제 없음</button>']]);
+  $('t-chat').querySelectorAll('button[data-m]').forEach((b) => b.onclick = async () => {
+    const a = b.dataset.a;
+    const r = await rpc('admin_chat_action', { p_message: +b.dataset.m, p_hide: a !== 'keep', p_mute_hours: a === 'mute' ? 24 : 0, p_reason: $('c-reason').value });
+    say(r === 'ok' ? '처리했습니다.' : '실패: ' + r, r === 'ok' ? 'ok' : 'bad'); if (r === 'ok') loadChat();
+  });
+}
+
+async function loadConfig() {
+  const { data, error } = await sb.rpc('client_config');
+  if (error) return say(error.message, 'bad');
+  $('t-config').innerHTML = '<h2>원격 설정 (앱이 읽는 값, 읽기 전용)</h2>' + table(data, [['key', '키'], ['value', '값']]) +
+    '<p class="dim">값 변경은 아직 SQL 로만 합니다(실수 방지).</p>';
+}
+
+sb.auth.onAuthStateChange((ev) => { if (ev === 'SIGNED_IN') boot(); });
+boot();
+</script>
+</body>
+</html>
