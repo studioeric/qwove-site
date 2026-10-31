@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>야차 키우기 계정 삭제 안내 | QWOVE</title>
+<meta name="description" content="야차 키우기(Yaksha Hunter) 계정 삭제 안내 / Account Deletion">
+<style>
+  :root{--bg:#faf7f0;--surface:#fff;--ink:#1d1b26;--muted:#6b6578;--gold:#8f6712;--gold-soft:#c9a961;--line:#e5dfd2;--chip:#f1ece0;
+        --sans:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;}
+  @media (prefers-color-scheme:dark){:root{--bg:#111019;--surface:#1a1824;--ink:#e9e3d6;--muted:#9a94a6;--gold:#e0ae48;--gold-soft:#8a6d2e;--line:#2b2839;--chip:#221f2f;color-scheme:dark}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.75;padding:0 16px}
+  .wrap{max-width:720px;margin:0 auto;padding:40px 0 64px;display:flex;flex-direction:column;gap:30px}
+  .langs{display:flex;gap:6px;flex-wrap:wrap}
+  .langs button{font:inherit;font-size:13px;font-weight:600;padding:5px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--muted);cursor:pointer}
+  .langs button.on{background:var(--gold);border-color:var(--gold);color:var(--bg)}
+  header{display:flex;flex-direction:column;gap:10px;padding-bottom:22px;border-bottom:2px solid var(--gold-soft)}
+  .eyebrow{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:700}
+  h1{font-size:clamp(26px,6vw,36px);line-height:1.3;margin:0}
+  .meta{font-size:13.5px;color:var(--muted)}
+  code{font-family:ui-monospace,Menlo,monospace;font-size:12.5px;background:var(--chip);padding:2px 7px;border-radius:5px}
+  section{display:flex;flex-direction:column;gap:10px}
+  h2{font-size:19px;margin:0}
+  p{margin:0;font-size:15px}
+  ul,ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:15px}
+  a{color:var(--gold);text-underline-offset:3px}
+  .box{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:8px}
+  footer{border-top:1px solid var(--line);padding-top:18px;font-size:13px;color:var(--muted)}
+  [hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="langs" id="langs">
+    <button type="button" data-l="ko">한국어</button>
+    <button type="button" data-l="en">English</button>
+  </div>
+
+  <!-- ===== 한국어 ===== -->
+  <article lang="ko" data-lang="ko">
+    <header>
+      <div class="eyebrow">Account Deletion</div>
+      <h1>야차 키우기 계정 삭제 안내</h1>
+      <div class="meta">운영자 쿼브(QWOVE) · 패키지 <code>com.kokokopam.yachakiyugi</code> · 2026년 11월 1일부터 적용</div>
+    </header>
+    <div style="height:24px"></div>
+    <div style="display:flex;flex-direction:column;gap:28px">
+      <section><h2>1. 게임 안에서 삭제하기</h2>
+        <ol>
+          <li>야차 키우기를 실행합니다.</li>
+          <li>설정 &gt; 계정 삭제를 누릅니다.</li>
+          <li>안내를 읽고 두 번 확인하면 삭제 요청이 접수됩니다.</li>
+        </ol>
+        <p>삭제 요청 후에는 같은 기기에서도 진행 정보를 되살릴 수 없습니다. 사용하지 않은 유료 상품이 있으면 삭제 전에 환불을 먼저 요청해 주세요.</p>
+      </section>
+      <section><h2>2. 앱이 없을 때 메일로 요청하기</h2>
+        <p>앱을 이미 지웠거나 기기를 잃어버려 게임 안에서 삭제할 수 없다면 <a href="mailto:qwove.corp@gmail.com?subject=%EA%B3%84%EC%A0%95%20%EC%82%AD%EC%A0%9C%20%EC%9A%94%EC%B2%AD">qwove.corp@gmail.com</a> 으로 아래 내용을 보내 주세요.</p>
+        <ul>
+          <li>제목: 계정 삭제 요청</li>
+          <li>유저 ID: 게임 안 설정 화면에 표시된 유저 ID</li>
+          <li>유저 ID를 모르시면: 결제나 로그인에 쓴 앱 마켓 계정(Google 또는 Apple)의 전자우편 주소, 또는 결제 주문번호와 닉네임</li>
+        </ul>
+        <p>본인 확인 후 접수 결과를 메일로 알려 드립니다. 확인에 필요한 경우 추가 정보를 여쭐 수 있습니다.</p>
+      </section>
+      <section><h2>3. 삭제되는 정보와 기간</h2>
+        <p>삭제 요청을 받은 날부터 30일 안에 게임 서버의 다음 정보를 모두 삭제합니다.</p>
+        <ul>
+          <li>플레이어 기록(유저 ID, 닉네임, 게임 기록)</li>
+          <li>랭킹·대련장 기록</li>
+          <li>서버 세이브 백업(암호화된 진행 정보 사본)</li>
+          <li>채팅 메시지</li>
+          <li>Google·Apple 로그인 연결 정보(사용자 식별자, 전자우편 주소)</li>
+        </ul>
+        <p>기기에 저장된 게임 데이터는 앱을 삭제하면 함께 지워집니다.</p>
+      </section>
+      <section><h2>4. 보관되는 정보</h2>
+        <div class="box">
+          <p><b>결제 기록</b>(주문번호, 상품 ID, 스토어 영수증, 결제 시각)은 「전자상거래 등에서의 소비자보호에 관한 법률」에 따라 5년간 다른 정보와 분리해 보관한 뒤 파기합니다. 환불, 결제 분쟁 처리 외의 목적으로는 쓰지 않습니다.</p>
+          <p>진행 중인 부정 이용 조치나 이의신청, 소비자 분쟁에 관한 기록은 <a href="/yacha/privacy/">개인정보처리방침</a>에서 정한 기간 동안 보관한 뒤 파기합니다.</p>
+        </div>
+      </section>
+      <section><h2>문의</h2>
+        <p>쿼브(QWOVE) · <a href="mailto:qwove.corp@gmail.com">qwove.corp@gmail.com</a> · <a href="/yacha/privacy/">개인정보처리방침</a> · <a href="/yacha/terms/">이용약관</a></p>
+      </section>
+    </div>
+  </article>
+
+  <!-- ===== English ===== -->
+  <article lang="en" data-lang="en" hidden>
+    <header>
+      <div class="eyebrow">Account Deletion</div>
+      <h1>Yaksha Hunter: Account Deletion</h1>
+      <div class="meta">Operator QWOVE (쿼브) · Package <code>com.kokokopam.yachakiyugi</code> · From November 1, 2026</div>
+    </header>
+    <div style="height:24px"></div>
+    <div style="display:flex;flex-direction:column;gap:28px">
+      <section><h2>1. Delete in the game</h2>
+        <ol>
+          <li>Open Yaksha Hunter.</li>
+          <li>Go to Settings &gt; Delete Account.</li>
+          <li>Read the notice and confirm twice. Your request is then received.</li>
+        </ol>
+        <p>After the request, your progress cannot be restored, even on the same device. If you have unused paid items, please request a refund before deleting.</p>
+      </section>
+      <section><h2>2. Request by email (without the app)</h2>
+        <p>If you no longer have the app, email <a href="mailto:qwove.corp@gmail.com?subject=Account%20deletion%20request">qwove.corp@gmail.com</a> with:</p>
+        <ul>
+          <li>Subject: Account deletion request</li>
+          <li>Your User ID, shown in the game's Settings screen</li>
+          <li>If you lost your User ID: the email address of the store account (Google or Apple) used for purchases or login, or a purchase order number and your nickname</li>
+        </ul>
+        <p>We will confirm by email once we have verified the request.</p>
+      </section>
+      <section><h2>3. What is deleted and when</h2>
+        <p>Within 30 days of your request, we delete from our game server: your player record (User ID, nickname, game records), rankings and Arena records, server save backups, chat messages, and your Google or Apple login link (provider user ID and email). Data on your device is removed when you uninstall the app.</p>
+      </section>
+      <section><h2>4. What is kept</h2>
+        <div class="box">
+          <p>Purchase records (order number, product ID, store receipt, purchase time) are kept separately for 5 years as required by Korean e-commerce law, used only for refunds and payment disputes, and then destroyed. Records of pending fair play actions, appeals or disputes are kept for the periods stated in our <a href="/yacha/privacy/">Privacy Policy</a>.</p>
+        </div>
+      </section>
+      <section><h2>Contact</h2>
+        <p>QWOVE · <a href="mailto:qwove.corp@gmail.com">qwove.corp@gmail.com</a> · <a href="/yacha/privacy/">Privacy Policy</a> · <a href="/yacha/terms/">Terms</a></p>
+      </section>
+    </div>
+  </article>
+
+  <footer>© QWOVE · <a href="/yacha/">Yaksha Hunter / 야차 키우기</a></footer>
+</div>
+<script>
+(function(){
+  function pick(){
+    var q=new URLSearchParams(location.search).get("lang"); if(q==="ko"||q==="en") return q;
+    var n=(navigator.language||"ko").toLowerCase(); return n.indexOf("ko")===0?"ko":"en";
+  }
+  function apply(l){
+    document.documentElement.lang=l;
+    document.querySelectorAll("[data-lang]").forEach(function(a){a.hidden=a.getAttribute("data-lang")!==l;});
+    document.querySelectorAll("#langs button").forEach(function(b){b.className=b.getAttribute("data-l")===l?"on":"";});
+    document.title = l==="ko" ? "야차 키우기 계정 삭제 안내 | QWOVE" : "Yaksha Hunter Account Deletion | QWOVE";
+  }
+  document.getElementById("langs").addEventListener("click",function(e){var l=e.target.getAttribute&&e.target.getAttribute("data-l"); if(l) apply(l);});
+  apply(pick());
+})();
+</script>
+</body>
+</html>
